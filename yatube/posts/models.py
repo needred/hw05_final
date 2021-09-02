@@ -49,8 +49,8 @@ class Post(models.Model):
     image - картинка к посту.
     """
     text = models.TextField(
-        verbose_name='Текст поста',
-        help_text='Введите текст поста',
+        verbose_name='Текст',
+        help_text='Текст вашего поста',
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,
@@ -67,13 +67,13 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
         related_name='posts',
         verbose_name='Сообщество',
-        help_text='Выберите группу',
+        help_text='Группа, к которой будет относиться пост',
     )
     image = models.ImageField(
-        verbose_name='Картинка',
+        verbose_name='Изображение',
         upload_to='posts/',
         blank=True,
-        help_text='Загрузите изображение',
+        help_text='Картинка к посту',
     )
 
     class Meta:
@@ -107,7 +107,7 @@ class Comment(models.Model):
     )
     text = models.TextField(
         verbose_name='Комментарий',
-        help_text='Введите текст комментария',
+        help_text='Текст комментария',
     )
     created = models.DateTimeField(
         auto_now_add=True,

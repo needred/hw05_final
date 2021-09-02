@@ -150,6 +150,7 @@ dmypy.json
 .static/
 .temp/static
 yatube/static
+yatube/media/
 .media/
 .yatube/media/cache
 .yatube/media/posts

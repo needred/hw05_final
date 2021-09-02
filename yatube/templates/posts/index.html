@@ -1,6 +1,5 @@
 ﻿{% extends 'base.html' %}
 {% load cache %}
-{% load thumbnail %}
 {% block title %}
   Последние обновления на сайте
 {% endblock %}
@@ -8,53 +7,11 @@
 {% block content %}
   {# <h1>Последние обновления на сайте</h1> #}
   {% include 'posts/includes/switcher.html' %}
-  {% load posts_filters %} {# Загружаем фильтры #}
   {% cache 20 index_page request.get_full_path %}
   <div class="row tm-row">
-  {% for post in page_obj %}
-    <article class="col-12 col-md-6 tm-post">
-      <hr class="tm-hr-primary">
-      <a href="{% url 'post:post_detail' post.id %}" class="effect-lily tm-post-link tm-pt-60">
-        <div class="tm-post-link-inner">
-          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-            <img class="img-fluid" src="{{ im.url }}">
-          {% endthumbnail %}
-        </div>
-        {# Отображаем плашку Новое только для двух постов и если они не старше 2 дней #}
-        {% if forloop.counter < 3 and post.pub_date|days_until < 3 and post.image %}<span class="position-absolute tm-new-badge">Новое</span>{% endif %}
-      </a>
-      {# В списке постов показываем только первые два абзаца, чтобы страница постов не превращалась в бесконечную "простыню" #}
-      <p class="tm-pt-30">{{ post.text|first_2paragraph|safe|linebreaksbr }}</p>
-      <div class="form-group row text-right">
-        <div class="col-12">
-        <a class="tm-btn tm-btn-primary tm-btn-small"
-          href="{% url 'post:post_detail' post.id %}" role="button">
-          Подробнее
-        </a>
-        </div>
-        </div>
-        <div class="d-flex justify-content-between tm-pt-45">
-          <span class="tm-color-primary">
-          {% if post.group %}
-            <a class="tm-color-primary" href="{% url 'post:group_list' post.group.slug %}">
-              {{ post.group.title|truncatechars:35 }}
-            </a>
-          {% endif %}
-          </span>
-          <span class="tm-color-primary" title="Дата публикации">{{ post.pub_date|date:"d E Y" }}</span>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-between">
-            <span title="Комментарии">
-                {% if post.comments.count > 0 %}
-                    <i class="fas fa-comments tm-color-primary"></i> {{ post.comments.count }}
-                {% endif %}
-            </span>
-          <span><a class="tm-color-primary" href="{% url 'post:profile' post.author.username %}" title="Все посты пользователя">
-              {{ post.author.get_full_name }}</a></span>
-        </div>
-    </article>
-  {% endfor %}
+    {% for post in page_obj %}
+      {% include 'posts/includes/post_list.html' %}
+    {% endfor %}
   </div>
   {% endcache %}
   {% include 'posts/includes/paginator.html' %}

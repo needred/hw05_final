@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %}
+  Пост {{ post.text|safe|linebreaksbr|truncatechars:30 }}
+{% endblock %}
+{% block content %}
+{% load posts_filters %} {# Загружаем фильтры #}
+<div class="row tm-row">
+  <div class="col-12">
+    <hr class="tm-hr-primary" />
+        {# Ссылка для открытия модальной формы с полноразмерной картинкой. #}
+          <div class="ba-0 ds-1">
+            {% thumbnail post.image "1920" crop="center" upscale=True as big %}
+              <img class="card-img my-2" src="{{ big.url }}">
+            {% endthumbnail %}
+          </div>
+  </div>
+</div>
+
+<div class="row tm-row">
+  <div class="col-lg-8 tm-post-col">
+    <div class="tm-post-full">
+      <div class="mb-4">
+        <p class="tm-mb-40">
+          Опубликовано {{ post.pub_date|date:"d E Y" }}
+        автором <a class="tm-color-primary" href="{% url 'post:profile' post.author.username %}" title="Все посты пользователя">
+            {{ post.author.get_full_name }} <i class="fas fa-edit tm-color-primary"></i> {{ post.author.posts.count }}
+        </a>
+        </p>
+            <!-- Ссылка на редактирование поста для автора -->
+         <p> {% if user == post.author %}
+            <a class="tm-btn tm-btn-primary tm-btn-small" href="{% url 'post:post_edit' post.id %}" role="button">
+              Редактировать запись
+            </a>
+          {% endif %}</p>
+        <p>{{ post.text|safe|linebreaksbr }}</p>
+        <span class="d-block text-right tm-color-primary">
+          {% if post.group %}
+            <a class="tm-color-primary" href="{% url 'post:group_list' post.group.slug %}">
+              Сообщество: {{ post.group.title }}
+            </a>
+          {% endif %}
+        </span>
+      </div>
+
+      {# Комментарии #}
+      {% include 'posts/comments.html' %}
+
+    </div>
+  </div>
+  <aside class="col-lg-4 tm-aside-col">
+    <div class="tm-post-sidebar">
+      <hr class="mb-3 tm-hr-primary" />
+      <h2 class="mb-4 tm-post-title tm-color-primary">Сообщества</h2>
+      <ul class="tm-mb-75 pl-5 tm-category-list">
+        {% for group in groups %}
+        <li>
+            <a class="tm-color-primary" href="{% url 'post:group_list' group.slug %}">
+              {{ group.title }}
+            </a>
+        </li>
+        {% endfor %}
+      </ul>
+
+      {# Другие посты #}
+      {% include 'posts/includes/related_posts.html' %}
+
+    </div>
+  </aside>
+</div>
+
+{% endblock %}
+
+
+
+
+

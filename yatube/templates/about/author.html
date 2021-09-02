@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Об авторе
+{% endblock %}
+
+{% block content %}
+<div class="row tm-row tm-mb-45">
+  <div class="col-12">
+    <hr class="tm-hr-primary tm-mb-55">
+      <img src="{% static 'img/img_about.jpg' %}" alt="Image" class="img-fluid">
+  </div>
+</div>
+<div class="row tm-row tm-mb-40">
+  <div class="col-12">
+    <div class="mb-4">
+      <h1 class="pt-2 tm-mb-40 tm-color-primary tm-post-title">Об авторе</h1>
+    <p>Здесь будет текст об авторе: его жизненном пути, о преградах
+        и их преодолении, о положительных и отрицательных чертах автора,
+        а также его вес, кличка собаки, девичья фамилия матери и пароль от кошелька.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

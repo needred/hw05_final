@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Технологии
+{% endblock %}
+
+{% block content %}
+<div class="row tm-row">
+  <div class="col-12">
+    <hr class="tm-hr-primary tm-mb-55" />
+    <img src="{% static 'img/img_tech.jpg' %}" alt="Image" style="width: 100%; margin-bottom: 30px">
+  </div>
+</div>
+<div class="row tm-row">
+  <div class="col-lg-8 tm-post-col">
+    <div class="tm-post-full">
+      <div class="mb-4">
+        <h1 class="pt-2 tm-mb-40 tm-color-primary tm-post-title">Технологии</h1>
+          <p>Здесь будет текст об используемых в проекте технологиях.
+               Это руки, мышка, клавиатура и ещё какие-то непонятные
+               аббревиатуры и названия.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="col-lg-4 tm-aside-col">
+    <div class="tm-post-sidebar">
+      <hr class="mb-3 tm-hr-primary" />
+      <h2 class="mb-4 tm-post-title tm-color-primary">Инструменты</h2>
+      <ul class="tm-mb-75 pl-5 tm-category-list">
+        <li>Python</li>
+        <li>Django</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+{% endblock %}

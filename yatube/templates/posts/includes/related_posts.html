@@ -1,0 +1,15 @@
+{% load thumbnail %}
+      <hr class="mb-3 tm-hr-primary" />
+      <h2 class="tm-mb-40 tm-post-title tm-color-primary">Новые посты</h2>
+      {% for post in posts %}
+      <a href="{% url 'post:post_detail' post.id %}" class="d-block tm-mb-40">
+        <figure>
+          {% thumbnail post.image "280" crop="center" upscale=True as im %}
+            <img class="img-fluid" src="{{ im.url }}">
+          {% endthumbnail %}
+          <figcaption class="tm-color-primary">
+              {{ post.text|truncatechars:200 }}
+          </figcaption>
+        </figure>
+      </a>
+      {% endfor %}

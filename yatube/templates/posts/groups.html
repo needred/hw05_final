@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+  Список сообществ
+{% endblock %}
+
+{% block content %}
+  <div class="row tm-row">
+    <div class="col-12">
+      <hr class="tm-hr-primary tm-mb-55" />
+        <h1 class="tm-color-primary">Список сообществ</h1>
+    </div>
+  </div>
+  <div class="row tm-row">
+  <ul>
+    {% for gr in groups %}
+      <li>
+        <a class="tm-color-primary" href="{{ gr.slug }}">
+          {{ gr.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

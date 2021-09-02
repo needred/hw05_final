@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Ошибка 404 {% endblock %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Ох-ох, а страница-то не существует!</h1>
+            <img src="{% static 'img/robot404.jpg' %}" width="168" height="200" class="d-inline-block align-top" alt="">
+            <p class="lead">Никто не спорит, ты тот ещё мамкин хакер,
+                но на нашем сайте пока нет страницы <code>{{ path }}</code>.<br>
+                Если когда-нибудь мы её добавим, обязательно тебе сообщим!</p>
+            <p class="lead"><a href="{% url 'post:index' %}">А пока лучше возвращайся на главную, обратный отсчёт запущен.
+                Через 30 секунд позвоним твоей мамке!</a></p>
+            <img src="{% static 'img/revtimer300.gif' %}" width="200" height="128" class="d-inline-block align-top" alt="">
+        </div>
+    </div>
+
+{% endblock %}

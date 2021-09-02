@@ -1,0 +1,51 @@
+﻿<!-- Шаблон header.html -->
+{% load static %}
+{% with request.resolver_match.view_name as view_name %}
+<header class="tm-header" id="tm-header">
+  <div class="tm-header-wrapper">
+    <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="tm-site-header">
+      <div class="mb-3 mx-auto tm-site-logo">
+        <img src="{% static 'img/logo.png' %}" width="90" height="90" class="d-inline-block align-top" alt="">
+      </div>
+      <h1 class="text-center"><span style="color:#FFAA00">Ya</span>tube</h1>
+    </div>
+    <nav class="tm-nav" id="tm-nav">
+      <ul>
+        <li class="tm-nav-item{% if view_name == 'post:index' %} active{% endif %}">
+          <a class="tm-nav-link" href="{% url 'post:index' %}"><i class="fas fa-home"></i>Главная</a>
+        </li>
+        <li class="tm-nav-item{% if view_name == 'about:author' %} active{% endif %}">
+          <a class="tm-nav-link" href="{% url 'about:author' %}"><i class="fas fa-users"></i>Об авторе</a>
+        </li>
+        <li class="tm-nav-item{% if view_name == 'about:tech' %} active{% endif %}">
+          <a class="tm-nav-link" href="{% url 'about:tech' %}"><i class="fas fa-laptop-code"></i>Технологии</a>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="tm-nav-item{% if view_name == 'post:post_create' %} active{% endif %}">
+              <a class="tm-nav-link" href="{% url 'post:post_create' %}"><i class="fas fa-pen"></i>Новая запись</a>
+            </li>
+            <li class="tm-nav-item{% if view_name == 'users:password_change_form' %} active{% endif %}">
+              <a class="tm-nav-link" href="{% url 'users:password_change_form' %}"><i class="fas fa-keyboard"></i>Изменить пароль</a>
+            </li>
+            <li class="tm-nav-item{% if view_name == 'users:logout' %} active{% endif %}">
+              <a class="tm-nav-link" href="{% url 'users:logout' %}"><i class="fas fa-sign-out-alt"></i>Выйти</a>
+            </li>
+            <li class="tm-nav-item{% if view_name == 'post:profile'%} active{% endif %}">
+              <a class="tm-nav-link" href="{% url 'post:profile' user.username %}"><i class="fas fa-user-alt"></i>Пользователь: {{ user.username }}</a>
+            </li>
+        {% else %}
+            <li class="tm-nav-item{% if view_name == 'users:login' %} active{% endif %}">
+              <a class="tm-nav-link" href="{% url 'users:login' %}"><i class="fas fa-sign-in-alt"></i>Войти</a>
+            </li>
+            <li class="tm-nav-item{% if view_name == 'users:signup' %} active{% endif %}">
+              <a class="tm-nav-link" href="{% url 'users:signup' %}"><i class="fas fa-plus-square"></i>Регистрация</a>
+            </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+{% endwith %}

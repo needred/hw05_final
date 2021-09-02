@@ -1,0 +1,15 @@
+      {% if following %}
+        <a
+          class="tm-btn btn-warning tm-btn-small2"
+          href="{% url 'post:profile_unfollow' author.username %}" role="button"
+        >
+          Отписаться
+        </a>
+      {% else %}
+        <a
+          class="tm-btn tm-btn-primary tm-btn-small2"
+          href="{% url 'post:profile_follow' author.username %}" role="button"
+        >
+          Подписаться
+        </a>
+      {% endif %}

@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# РџР°РїРєРё, СЃРѕР·РґР°РІР°РµРјС‹Рµ СЃСЂРµРґРѕР№ СЂР°Р·СЂР°Р±РѕС‚РєРё
+# Папки, создаваемые средой разработки
 .idea
 .DS_Store
 .AppleDouble
@@ -145,8 +145,11 @@ dmypy.json
 
 .mypy_cache
 
-# РїР°РїРєРё СЃРѕ СЃС‚Р°С‚РёРєРѕР№ Рё РјРµРґРёР°
-static/
-yatube/posts/static/
-yatube/media/
 
+# Static
+.static/
+.temp/static
+yatube/static
+.media/
+.yatube/media/cache
+.yatube/media/posts

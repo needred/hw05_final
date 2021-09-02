@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}
+      {% if is_edit %}
+        Редактировать пост
+      {% else %}
+        Новый пост
+      {% endif %}
+{% endblock %}
+{% block content %}
+
+<div class="row tm-row tm-mb-120">
+  <div class="col-12">
+    <hr class="tm-hr-primary tm-mb-55" />
+    <h2 class="tm-color-primary tm-post-title tm-mb-60">
+      {% if is_edit %}
+        Редактировать запись
+      {% else %}
+        Добавить запись
+      {% endif %}
+    </h2>
+  </div>
+  <div class="col-lg-7 tm-contact-form">
+
+    {% load user_filters %} {# Загружаем фильтры #}
+
+    <form method="post" enctype="multipart/form-data" class="mb-5 ml-auto mr-0 tm-contact-form">
+      {% csrf_token %}
+      {# Выводим поля в цикле, по отдельности #}
+      {% for field in form %}
+        <div class="form-group row mb-4">
+          <label for="{{ field.id_for_label }}" class="col-sm-6 col-form-label tm-color-primary">
+            {{ field.label }}
+              {% if field.field.required %}
+                <span class="required text-danger">*</span>
+              {% endif %}
+          </label>
+          <div class="col-sm-12">
+          {# К полю ввода добавляем атрибут class #}
+          {{ field|addclass:'form-control mr-0 ml-auto' }}
+            {% if field.help_text %}
+              <small
+                 id="{{ field.id_for_label }}-help"
+                 class="form-text text-muted"
+              >
+                {{ field.help_text|safe }}
+              </small>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+      <div class="form-group row text-right">
+        <div class="col-12">
+        <button type="submit" class="tm-btn tm-btn-primary tm-btn-small">
+          {% if is_edit %}
+            Сохранить
+          {% else %}
+            Добавить
+          {% endif %}
+        </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

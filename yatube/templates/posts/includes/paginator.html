@@ -1,0 +1,44 @@
+{% if page_obj.has_other_pages %}
+<div class="row tm-row tm-mt-100 tm-mb-75">
+  <div class="tm-prev-next-wrapper">
+        {% if page_obj.has_previous %}
+      {% comment %}
+          <a class="mb-2 tm-btn tm-btn-primary tm-prev-next" href="?page=1">Первая</a>
+            {% endcomment %}
+           <a class="mb-2 tm-btn tm-btn-primary tm-prev-next" href="?page={{ page_obj.previous_page_number }}">
+             Предыдущая
+           </a>
+        {% endif %}
+    {% if page_obj.has_next %}
+      <a class="mb-2 tm-btn tm-btn-primary tm-prev-next" href="?page={{ page_obj.next_page_number }}">
+        Следующая
+      </a>
+      {% comment %}
+      <a class="mb-2 tm-btn tm-btn-primary tm-prev-next" href="?page={{ page_obj.paginator.num_pages }}">
+        Последняя
+      </a>
+      {% endcomment %}
+    {% endif %}
+  </div>
+
+  <div class="tm-paging-wrapper">
+  <span class="d-inline-block mr-3">Страница</span>
+    <nav class="tm-paging-nav d-inline-block">
+    <ul>
+      {% for i in page_obj.paginator.page_range %}
+        {% if page_obj.number == i %}
+          <li class="tm-paging-item active">
+            <a class="mb-2 tm-btn tm-paging-link">{{ i }}</a>
+          </li>
+        {% else %}
+          <li class="tm-paging-item">
+            <a class="mb-2 tm-btn tm-paging-link" href="?page={{ i }}">{{ i }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    </nav>
+  </div>
+
+</div>
+{% endif %}

@@ -24,6 +24,7 @@ GROUP_NONEXIST = reverse('post:group_list', kwargs={'slug': SLUG_NONEXIST})
 PROFILE_NONEXIST = reverse('post:profile', kwargs={'username': USER_NONEXIST})
 POST_NONEXIST = reverse('post:post_detail', kwargs={'post_id': 1000})
 
+
 class PostsURLTests(TestCase):
 
     @classmethod

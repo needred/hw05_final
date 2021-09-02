@@ -208,4 +208,3 @@ def profile_unfollow(request, username):
     if username != request.user.username and is_follow:
         Follow.objects.filter(user=request.user).filter(author=author).delete()
     return redirect('post:profile', username=username)
-

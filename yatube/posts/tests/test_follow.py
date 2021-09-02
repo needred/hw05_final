@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from ..models import Post, Follow
+from ..models import Post
 
 User = get_user_model()
 
@@ -22,12 +22,12 @@ class FollowTests(TestCase):
         super().setUpClass()
         cls.author = User.objects.create_user(username=USERNAME_AUTH)
         cls.follower = User.objects.create_user(username='Moriarty')
-        cls.post = Post.objects.create(text='Тестовый пост 1',
-                            author=cls.author,
-                            group=None)
-        cls.post2 = Post.objects.create(text='Тестовый пост 2',
-                            author=cls.follower,
-                            group=None)
+        cls.post = Post.objects.create(
+            text='Тестовый пост 1', author=cls.author, group=None
+        )
+        cls.post2 = Post.objects.create(
+            text='Тестовый пост 2', author=cls.follower, group=None
+        )
 
     def setUp(self):
         self.authorized_author = Client()

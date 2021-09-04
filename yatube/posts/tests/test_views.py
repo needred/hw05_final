@@ -129,10 +129,11 @@ class PostsViewsTests(TestCase):
         Шаблон index сформирован с правильным контекстом.
         """
         response = self.authorized_client.get(INDEX)
-        post_text_0 = response.context.get('page_obj')[0].text
-        post_author_0 = response.context.get('page_obj')[0].author.username
-        post_group_0 = response.context.get('page_obj')[0].group.id
-        post_image_0 = response.context.get('page_obj')[0].image
+        response_object = response.context.get('page_obj')[0]
+        post_text_0 = response_object.text
+        post_author_0 = response_object.author.username
+        post_group_0 = response_object.group.id
+        post_image_0 = response_object.image
         self.assertEqual(post_text_0, TEST_POST)
         self.assertEqual(post_author_0, USERNAME_AUTH)
         self.assertEqual(post_group_0, self.group.id)
@@ -144,11 +145,12 @@ class PostsViewsTests(TestCase):
         Шаблон group сформирован с правильным контекстом.
         """
         response = self.authorized_client.get(GROUP_POSTS)
-        self.assertEqual(response.context.get('group').title,
+        response_object = response.context.get('group')
+        self.assertEqual(response_object.title,
                          'Тестовая группа')
-        self.assertEqual(response.context.get('group').description,
+        self.assertEqual(response_object.description,
                          'Тестовое описание')
-        self.assertEqual(response.context.get('group').slug, TEST_SLUG)
+        self.assertEqual(response_object.slug, TEST_SLUG)
         post_image_0 = response.context.get('page_obj')[0].image
         self.assertEqual(post_image_0, POSTS_IMG)
 
@@ -158,7 +160,6 @@ class PostsViewsTests(TestCase):
         Шаблон profile сформирован с правильным контекстом.
         """
         response = self.authorized_client.get(PROFILE)
-        self.assertEqual(response.context.get('count'), 2)
         self.assertEqual(response.context.get('author').username,
                          USERNAME_AUTH)
         self.assertEqual(len(response.context.get('page_obj').object_list),
@@ -191,10 +192,11 @@ class PostsViewsTests(TestCase):
         response = self.authorized_client.get(self.POST_URL)
         self.assertIn('post', response.context)
         self.assertIn('form', response.context)
+        response_object = response.context['post']
         post_context = {
-            response.context['post'].text: self.post.text,
-            response.context['post'].author.username: self.user.username,
-            response.context['post'].image: POSTS_IMG,
+            response_object.text: self.post.text,
+            response_object.author.username: self.user.username,
+            response_object.image: POSTS_IMG,
             response.context.get('comments')[0].text: 'Комментарий 1',
         }
         for key, value in post_context.items():
@@ -206,9 +208,9 @@ class PostsViewsTests(TestCase):
         """
         На странице со списком сообществ показано правильное количество групп.
         """
-        # страница сл списком сообществ - вне задания
+        # страница со списком сообществ - вне задания
         response = self.authorized_client.get(GROUPS)
-        self.assertEqual(len(response.context.get('groups')), 2)
+        self.assertEqual(len(response.context.get('page_obj').object_list), 2)
 
     @tag('group')
     def test_post_view_on_your_group_page(self):

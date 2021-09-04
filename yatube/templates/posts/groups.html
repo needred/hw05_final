@@ -12,11 +12,12 @@
   </div>
   <div class="row tm-row">
   <ul>
-    {% for gr in groups %}
+    {% for group in page_obj %}
       <li>
-        <a class="tm-color-primary" href="{{ gr.slug }}">
-          {{ gr.title }}
+        <a class="tm-color-primary" href="{{ group.slug }}">
+          {{ group.title }}
         </a>
+        <p>{{ group.description|safe|linebreaksbr }}</p>
       </li>
     {% endfor %}
   </ul>

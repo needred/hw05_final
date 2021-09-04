@@ -7,15 +7,16 @@
   {% load posts_filters %} {# Загружаем фильтры #}
   <div class="row tm-row">
     <div class="col-12">
-      <h1 class="tm-color-primary">Все посты пользователя {{ author.get_full_name }} <i class="fas fa-edit tm-color-primary"></i> {{ count }}</h1>
-        {% if show_follow_button %}
+      <h1 class="tm-color-primary">Все посты {{ author.get_full_name }} <i class="fas fa-edit tm-color-primary"></i> {{ author.posts.count }}</h1>
+        {# показывать кнопку подписки только для авторизованных и на чужих страницах, на своей не надо #}
+        {% if user.is_authenticated and author != request.user %}
           {% include 'posts/includes/follow_button.html' %}
         {% endif %}
     </div>
     <div class="col-12 tm-mb-15">
     <span class="tm-color-primary">
       {% if author.following.count > 0 %}
-        Подписчики автора ({{ author.following.count }}):
+        Подписчики автора ({{ author.following.count }}) <i class="fas fa-arrow-left tm-color-primary"></i>
         {% for follower in author.following.all %}
           <a class="tm-border" href="{% url 'post:profile' follower.user.username %}" title="Профиль пользователя {{ follower.user.get_full_name }}">
             {{ follower.user.get_full_name }}</a>
@@ -27,7 +28,7 @@
     <div class="col-12 tm-mb-40">
     <span class="tm-color-primary">
     {%  if author.follower.count > 0 %}
-      На кого подписан автор ({{ author.follower.count }}):
+      На кого подписан автор ({{ author.follower.count }}) <i class="fas fa-arrow-right tm-color-primary"></i>
       {% for following in author.follower.all %}
           <a class="tm-border" href="{% url 'post:profile' following.author.username %}" title="Профиль пользователя {{ following.author.get_full_name }}">
           {{ following.author.get_full_name }}</a>

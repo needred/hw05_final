@@ -6,16 +6,23 @@ from .forms import PostForm, CommentForm
 from .models import Follow, Group, Post, User
 
 
+def paginator_create(request, object_list):
+    """
+    Формирование пагинатора для списков постов.
+    """
+    paginator = Paginator(object_list, settings.PAGINATOR_OBJECTS_PER_PAGE)
+    page_number = request.GET.get('page')
+    return paginator.get_page(page_number)
+
+
 def index(request):
     """
     Вывод списка постов на главной странице.
     """
     posts = Post.objects.select_related('author', 'group').all()
-    paginator = Paginator(posts, settings.PAGINATOR_OBJECTS_PER_PAGE)
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {'page_obj': page_obj}
+    context = {
+        'page_obj': paginator_create(request, posts)
+    }
     template = 'posts/index.html'
     return render(request, template, context)
 
@@ -26,12 +33,9 @@ def group_posts(request, slug):
     """
     group = get_object_or_404(Group, slug=slug)
     posts = group.posts.prefetch_related('author').all()
-    paginator = Paginator(posts, settings.PAGINATOR_OBJECTS_PER_PAGE)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
     context = {
         'group': group,
-        'page_obj': page_obj,
+        'page_obj': paginator_create(request, posts),
     }
     template = 'posts/group_list.html'
     return render(request, template, context)
@@ -42,7 +46,10 @@ def groups(request):
     Отображение списка групп-сообществ (вне задания).
     """
     groups_list = Group.objects.all()
-    context = {'groups': groups_list}
+    # формирование пагинатора стало часто повторяться - вынес в функцию
+    context = {
+        'page_obj': paginator_create(request, groups_list),
+    }
     template = 'posts/groups.html'
     return render(request, template, context)
 
@@ -52,29 +59,18 @@ def profile(request, username):
     Отображение профиля пользователя.
     """
     author = get_object_or_404(User, username=username)
-    # posts = author.posts.all()
     posts = author.posts.prefetch_related('author').all()
-    paginator = Paginator(posts, settings.PAGINATOR_OBJECTS_PER_PAGE)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
     is_following = False
-    show_follow_button = False
-    # показывать кнопку подписки только для авторизованных
-    # и на чужих страницах, на своей не надо
-    # [TO-DO]: как вариант: кнопку подписки показывать для гостей,
+    # TODO как вариант: кнопку подписки показывать для гостей,
     # но тогда с редиректом на авторизацию
-    if request.user.is_authenticated and author != request.user:
-        show_follow_button = True
-        # проверка на подписки: True - [Подписаться], False - [Отписаться]
-        if Follow.objects.filter(
-                user=request.user).filter(author=author).exists():
+    # проверка на подписки: True - [Подписаться], False - [Отписаться]
+    if request.user.is_authenticated:
+        if Follow.objects.filter(user=request.user, author=author).exists():
             is_following = True
     context = {
         'author': author,
-        'count': paginator.count,
         'following': is_following,
-        'show_follow_button': show_follow_button,
-        'page_obj': page_obj,
+        'page_obj': paginator_create(request, posts),
     }
     return render(request, 'posts/profile.html', context)
 
@@ -169,13 +165,12 @@ def follow_index(request):
     """
     Страница с контентом автора, на которого подписан пользователь.
     """
-    follows = Follow.objects.filter(user=request.user).values('author')
+    # Ох, додуматься до этого было очень сложно. По итогам этого курса вижу,
+    # что недостаточно практиковался с фильтрами и местами слабо представляю
+    # механизм работы фильтров и все их возможности. Нужно ещё изучать примеры
     following_posts = Post.objects.prefetch_related(
-        'author').filter(author_id__in=follows)
-    paginator = Paginator(following_posts, settings.PAGINATOR_OBJECTS_PER_PAGE)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {'page_obj': page_obj}
+        'author').filter(author__following__user=request.user)
+    context = {'page_obj': paginator_create(request, following_posts)}
     return render(request, 'posts/follow.html', context)
 
 
@@ -185,13 +180,9 @@ def profile_follow(request, username):
     Подписка на контент автора.
     """
     author = get_object_or_404(User, username=username)
-    # проверяем, что юзер ещё не подписан
-    is_follow = Follow.objects.filter(
-        user=request.user).filter(author=author).exists()
-    # самого на себя не подписываем и если ещё не подписан
-    # кнопки итак не должны отображаться, проверка от взлома
-    if username != request.user.username and not is_follow:
-        Follow.objects.create(user=request.user, author=author)
+    # проверяем, что юзер ещё не подписан и не на самого себя
+    if username != request.user.username:
+        Follow.objects.get_or_create(user=request.user, author=author)
     return redirect('post:profile', username=username)
 
 
@@ -201,10 +192,8 @@ def profile_unfollow(request, username):
     Отписка от автора (от надоевшего графомана).
     """
     author = get_object_or_404(User, username=username)
-    # проверяем, что юзер подписан
-    is_follow = Follow.objects.filter(
-        user=request.user).filter(author=author).exists()
-    # самого себя не отписываем и если уже подписан
-    if username != request.user.username and is_follow:
-        Follow.objects.filter(user=request.user).filter(author=author).delete()
+    # проверяем, что юзер подписан и удаляем
+    following = Follow.objects.filter(user=request.user, author=author)
+    if following.exists():
+        following.delete()
     return redirect('post:profile', username=username)

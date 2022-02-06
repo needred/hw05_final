@@ -1,3 +1,23 @@
 # hw05_final
+Социальная сеть с возможностью создания, просмотра, редактирования и удаления (CRUD) записей.
+Реализован механизм подписки на понравившихся авторов и отслеживание их записей.
+Используется пагинация постов и кэширование.
+Реализована регистрация пользователей с верификацией данных, сменой и восстановлением пароля через почту.
+Покрытие тестами. Возможность добавления изображений.
 
-[![CI](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml/badge.svg?branch=master)](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml)
+#### Стек технологий
+Python 3, Django 2.2, Django ORM, SQLite
+
+#### Технические требования
+1) Все необходимые пакеты перечислены в ```requirements.txt```
+
+#### Запуск приложения
+1) Установите зависимости из ```requirements.txt```:
+    - ```pip install -r requirements.txt```
+2) После того как все зависимости установятся, примените все необходимые миграции:
+    - ```python manage.py makemigrations```
+    - ```python manage.py migrate```
+3) Для доступа к панели администратора создайте администратора:
+    - ```python manage.py createsuperuser```
+4) Запустите приложение:
+    - ```python manage.py runserver```

@@ -7,7 +7,7 @@
 * Покрытие тестами. Возможность добавления изображений.
 
 ### Технологический стек
-Python 3, Django 2.2, Django ORM, SQLite, pytest
+[![Python](https://img.shields.io/badge/-Python-464646?style=for-the-badge&logo=Python&logoColor=56C0C0&color=008080)](https://www.python.org/) [![Django](https://img.shields.io/badge/-Django-464646?style=for-the-badge&logo=Django&logoColor=56C0C0&color=008080)](https://www.djangoproject.com/) [![Django ORM](https://img.shields.io/badge/-Django%20ORM-464646?style=for-the-badge&logo=Django&logoColor=56C0C0&color=008080)](https://docs.djangoproject.com/en/4.0/topics/db/models/) [![SQLite](https://img.shields.io/badge/-SQLite-464646?style=for-the-badge&logo=SQLite&logoColor=56C0C0&color=008080)](https://www.sqlite.org/index.html) [![pytest](https://img.shields.io/badge/-pytest-464646?style=for-the-badge&logo=Pytest&logoColor=56C0C0&color=008080)](https://docs.pytest.org/en/7.0.x/)
 
 ### Технические требования
 1) Все необходимые пакеты перечислены в ```requirements.txt```
